@@ -32,7 +32,7 @@ If you discover a security vulnerability, please report it responsibly:
 
 ### Rate Limiting
 
-- API calls respect kwtSMS rate limits (max 2 requests/second)
+- API calls are paced at 2 requests/second or less, under the kwtSMS limit of 10 requests/second
 - Balance and coverage checks run before every send attempt
 
 ## Supported Versions
