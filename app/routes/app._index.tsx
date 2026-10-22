@@ -137,7 +137,8 @@ export default function SettingsPage() {
             onChange={() => setTestMode(!testMode)}
           />
           <s-paragraph>
-            When enabled, SMS messages are queued but not delivered to handsets. No credits are consumed.
+            {/* 2026-10-22 15:36 +03: corrected, test messages hold credits until deleted from the Sending Queue. */}
+            When enabled, SMS messages are queued but not delivered to handsets. Their credits are held until you delete them from the Sending Queue in your kwtsms.com account.
           </s-paragraph>
         </s-section>
 

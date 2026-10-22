@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Docs
+- Test mode: test messages are queued but not delivered. Their credits are held until you delete them from the Sending Queue in your kwtsms.com account.
+- ERR028: opt-in Duplicate SMS protection with a per-account window (10 seconds by default), not a fixed 15 seconds.
+
 ### Added
 - Initial project scaffolding from Shopify React Router template
 - Prisma database schema (GatewayCredentials, Settings, SmsTemplate, SmsLog)

@@ -32,7 +32,7 @@ kwtSMS is a Kuwaiti SMS gateway trusted by 2,700+ businesses to deliver messages
 - **Private Sender ID**: Customers see your brand name, not a random number
 - **Global Status Bar**: Live SMS status, balance, mode, and sender ID on every page
 - **Gateway Login/Logout**: Connect and disconnect kwtSMS credentials
-- **Test Mode**: Send test SMS without consuming credits
+- **Test Mode**: Test SMS are queued, not delivered; credits held until you delete them from the Sending Queue
 - **Phone Normalization**: Handles local numbers, Arabic digits, auto country code prefixing
 - **Daily Sync**: Background sync of balance, sender IDs, and coverage
 - **SMS Logs**: Full audit trail with filtering by status and event type

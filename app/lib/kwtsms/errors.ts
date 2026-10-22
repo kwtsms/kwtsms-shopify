@@ -23,7 +23,8 @@ const ERROR_MAP: Record<string, KwtSmsError> = {
   ERR025: { code: "ERR025", description: "Invalid number format", action: "Strip +, 00, spaces from phone number" },
   ERR026: { code: "ERR026", description: "No route for country", action: "Contact kwtSMS to activate international sending" },
   ERR027: { code: "ERR027", description: "HTML tags in message", action: "Strip HTML tags from message" },
-  ERR028: { code: "ERR028", description: "Must wait 15s before sending to same number again", action: "Wait 15 seconds between sends to the same number" },
+  // 2026-10-22 15:36 +03: ERR028 is opt-in duplicate SMS protection with a per-account window (10 s default), never a fixed 15 s.
+  ERR028: { code: "ERR028", description: "Sent to the same number too soon.", action: "Duplicate SMS protection is on for this account. Wait for the account's window (10 seconds by default) before resending" },
   ERR029: { code: "ERR029", description: "Message does not exist or wrong msgid", action: "Verify msg-id is correct" },
   ERR030: { code: "ERR030", description: "Message stuck in queue with error", action: "Delete from queue to recover credits" },
   ERR031: { code: "ERR031", description: "Bad language detected", action: "Review message content" },
