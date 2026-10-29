@@ -1,6 +1,6 @@
 # kwtSMS for Shopify
 
-[![CI](https://github.com/boxlinknet/kwtsms-shopify/actions/workflows/ci.yml/badge.svg)](https://github.com/boxlinknet/kwtsms-shopify/actions/workflows/ci.yml)
+[![CI](https://github.com/kwtsms/kwtsms-shopify/actions/workflows/ci.yml/badge.svg)](https://github.com/kwtsms/kwtsms-shopify/actions/workflows/ci.yml)
 [![Shopify](https://img.shields.io/badge/Shopify-App-96bf48?logo=shopify&logoColor=white)](https://www.kwtsms.com/integrations.html)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React Router](https://img.shields.io/badge/React_Router-v7-ca4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
@@ -105,4 +105,4 @@ Proprietary. All rights reserved.
 ## Support
 
 - kwtSMS Support: [kwtsms.com](https://www.kwtsms.com/#contact)
-- Issues: [GitHub Issues](https://github.com/boxlinknet/kwtsms-shopify/issues)
+- Issues: [GitHub Issues](https://github.com/kwtsms/kwtsms-shopify/issues)
