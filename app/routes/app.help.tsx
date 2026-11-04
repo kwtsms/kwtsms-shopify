@@ -253,7 +253,7 @@ export default function HelpPage() {
               - Implementation best practices for SMS APIs.
             </s-list-item>
             <s-list-item>
-              <s-link href="https://github.com/boxlinknet/kwtsms-shopify/issues" target="_blank">
+              <s-link href="https://github.com/kwtsms/kwtsms-shopify/issues" target="_blank">
                 GitHub Issues
               </s-link>{" "}
               - Report bugs or request features for this Shopify plugin.
