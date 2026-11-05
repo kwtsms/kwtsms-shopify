@@ -63,9 +63,9 @@ export default function Privacy() {
       </p>
 
       <h2>4. Third-Party Data Sharing</h2>
+      {/* 2026-11-06 00:40 +03: link to the www.kwtsms.com home page removed, plain text only, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
       <p>
         To deliver SMS messages, customer phone numbers and message content are
-        {/* 2026-11-06 00:40 +03: link to the www.kwtsms.com home page removed, plain text only, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
         transmitted to the <strong>kwtSMS gateway</strong> (kwtsms.com), which
         is the SMS delivery provider. This is required for the App to
         function.
