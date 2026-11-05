@@ -13,5 +13,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await db.session.deleteMany({ where: { shop } });
   }
 
+  // 2026-11-06 00:20 +03: delete the shop's stored kwtSMS credentials at once (privacy page promise), rest waits for shop/redact, why (Shopify review 1.1.4), shp-fix-submit
+  try {
+    await db.gatewayCredentials.deleteMany({ where: { shop } });
+  } catch (err) {
+    console.error(`[webhook] ${topic} credentials delete failed for ${shop}:`, err);
+  }
+
   return new Response();
 };
