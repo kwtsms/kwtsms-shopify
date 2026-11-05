@@ -9,10 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Requests to kwtSMS carry the integration name and version (no personal data) so kwtSMS can see which integrations are in use.
+- SMS logs older than 90 days are deleted automatically, as the privacy policy states.
+
+### Fixed
+- Uninstalling the app deletes your stored kwtSMS credentials at once; settings, templates and logs follow with Shopify's shop data erasure request 48 hours later.
+- Privacy webhooks (customer data request, customer erasure, shop erasure) always answer Shopify once verified, so a temporary database error no longer causes repeated retries.
+- Customer erasure no longer risks matching every log of the store when the customer's phone has no digits.
 
 ### Changed
 - Docs and examples use the placeholder 965XXXXXXXX instead of a sample mobile number.
 - The app and its landing page no longer show prices or recharge links; they point to your kwtSMS account.
+- The privacy policy describes exactly what happens on uninstall and on a customer data request (the request is recorded; the store owner gets the customer's SMS logs on request through kwtSMS support).
+- Help page links go to kwtSMS support and the API documentation only; links to pages with prices or buy buttons were removed.
+- The landing page no longer has a store-domain install form; the app is installed from the Shopify App Store. Setup step 1 says "Uses your kwtSMS account".
+
+### Removed
+- The unused template page /app/additional.
 
 ### Docs
 - Test mode: test messages are queued but not delivered. Their credits are held until you delete them from the Sending Queue in your kwtsms.com account.
