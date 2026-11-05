@@ -10,8 +10,13 @@ import type {
 import { mapError } from "./errors";
 import { normalize } from "./phone";
 import { cleanMessage } from "./message";
+// 2026-11-05 14:59 +03: app version for the User-Agent, read from package.json (one source), #939
+import { version as APP_VERSION } from "../../../package.json";
 
 const API_BASE = "https://www.kwtsms.com/API";
+// 2026-11-05 14:59 +03: sent on every API call so kwtSMS can count accounts per integration
+// (name and version only, no personal data), #939
+export const USER_AGENT = `kwtsms-shopify/${APP_VERSION}`;
 const TIMEOUT_MS = 10_000;
 const BATCH_SIZE = 200;
 const BATCH_DELAY_MS = 500;
@@ -179,6 +184,7 @@ export class KwtSmsClient {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "User-Agent": USER_AGENT, // 2026-11-05 14:59 +03: identify the integration, #939
         },
         body: JSON.stringify({
           username: this.username,
