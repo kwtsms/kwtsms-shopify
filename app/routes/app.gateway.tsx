@@ -344,7 +344,8 @@ export default function GatewaySettings() {
                 autocomplete="off"
               />
               <div style={{ textAlign: "right" }}>
-                <s-text>Enter one or multiple numbers separated by commas, e.g. 98765432, 96598765432</s-text>
+                {/* 2026-11-05 11:12 +03: examples use the placeholders XXXXXXXX and 965XXXXXXXX, the old sample mobile number belongs to a real person, int-testnumber */}
+                <s-text>Enter one or multiple numbers separated by commas, e.g. XXXXXXXX, 965XXXXXXXX</s-text>
               </div>
               <s-text-field
                 label="Message"
