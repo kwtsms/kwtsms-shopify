@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Requests to kwtSMS carry the integration name and version (no personal data) so kwtSMS can see which integrations are in use.
 - SMS logs older than 90 days are deleted automatically, as the privacy policy states.
+- Support page (notify.kwtsms.com/support): contact e-mail, what to include, response hours and common questions.
+- Sender ID page (notify.kwtsms.com/sender-id): what a Sender ID is, the default sender, how to request your own and where to choose it in the app.
 
 ### Fixed
 - Uninstalling the app deletes your stored kwtSMS credentials at once; settings, templates and logs follow with Shopify's shop data erasure request 48 hours later.
@@ -22,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The privacy policy describes exactly what happens on uninstall and on a customer data request (the request is recorded; the store owner gets the customer's SMS logs on request through kwtSMS support).
 - Help page links go to kwtSMS support and the API documentation only; links to pages with prices or buy buttons were removed.
 - The landing page no longer has a store-domain install form; the app is installed from the Shopify App Store. Setup step 1 says "Uses your kwtSMS account".
+- Links in the app and on its public pages to the kwtsms.com home, contact, support and API documentation pages now go to the app's own Support and Sender ID pages. Only the signup and login links to kwtsms.com remain, labelled "Create a kwtSMS account" and "Log in to kwtSMS".
+- The landing, support, Sender ID and privacy pages share one footer with Support, Sender ID and Privacy Policy links.
+- The privacy policy names Delete All Logs on the Logs page for deleting SMS logs at any time, and its contact section gives the support e-mail and the Support page.
 
 ### Removed
 - The unused template page /app/additional.
