@@ -40,11 +40,12 @@ export default function HelpPage() {
               <strong>Register a Sender ID.</strong> In your
               kwtSMS dashboard, register a Sender ID (up to 11 characters).
               This is the name recipients will see when they receive your SMS.
-              See the{" "}
-              <s-link href="https://www.kwtsms.com/sender-id-help.html" target="_blank">
-                Sender ID help page
-              </s-link>{" "}
-              for details.
+              {/* 2026-11-06 00:20 +03: link to sender-id-help.html (shows prices and a buy button) replaced by the support page, why (Shopify review 1.2.1), shp-fix-submit */}
+              For help, contact{" "}
+              <s-link href="https://www.kwtsms.com/support.html" target="_blank">
+                kwtSMS support
+              </s-link>
+              .
             </s-list-item>
             <s-list-item>
               <strong>Customize your templates.</strong>{" "}
@@ -223,18 +224,7 @@ export default function HelpPage() {
         <h2 style={{ fontSize: "18px", fontWeight: 600, margin: "0 0 12px 0" }}>Useful Links</h2>
         <s-box padding="base">
           <s-unordered-list>
-            <s-list-item>
-              <s-link href="https://www.kwtsms.com" target="_blank">
-                kwtSMS Website
-              </s-link>{" "}
-              - Main website and account management.
-            </s-list-item>
-            <s-list-item>
-              <s-link href="https://www.kwtsms.com/faq/" target="_blank">
-                FAQ
-              </s-link>{" "}
-              - Frequently asked questions about kwtSMS services.
-            </s-list-item>
+            {/* 2026-11-06 00:20 +03: removed kwtSMS home, FAQ, Sender ID help and best-practices links (pages show prices or buy buttons), added the API documentation, why (Shopify review 1.2.1), shp-fix-submit */}
             <s-list-item>
               <s-link href="https://www.kwtsms.com/support.html" target="_blank">
                 Support Center
@@ -242,16 +232,10 @@ export default function HelpPage() {
               - Get help from the kwtSMS support team.
             </s-list-item>
             <s-list-item>
-              <s-link href="https://www.kwtsms.com/sender-id-help.html" target="_blank">
-                Sender ID Help
+              <s-link href="https://www.kwtsms.com/api-documentation.html" target="_blank">
+                API Documentation
               </s-link>{" "}
-              - How to register and manage your Sender IDs.
-            </s-list-item>
-            <s-list-item>
-              <s-link href="https://www.kwtsms.com/articles/sms-api-implementation-best-practices.html" target="_blank">
-                SMS Best Practices
-              </s-link>{" "}
-              - Implementation best practices for SMS APIs.
+              - kwtSMS API reference and error codes.
             </s-list-item>
             <s-list-item>
               <s-link href="https://github.com/kwtsms/kwtsms-shopify/issues" target="_blank">
