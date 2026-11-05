@@ -139,7 +139,8 @@ export default function SettingsPage() {
           />
           <s-paragraph>
             {/* 2026-10-22 15:36 +03: corrected, test messages hold credits until deleted from the Sending Queue. */}
-            When enabled, SMS messages are queued but not delivered to handsets. Their credits are held until you delete them from the Sending Queue in your kwtsms.com account.
+            {/* 2026-11-06 00:58 +03: neutral test-mode text, no credit wording (Shopify 1.2.1, Boss 00:39), shp-fix-submit */}
+            When enabled, SMS messages are accepted by kwtSMS but not delivered to handsets.
           </s-paragraph>
         </s-section>
 

@@ -70,18 +70,7 @@ export default function HelpPage() {
       <s-section>
         <h2 style={{ fontSize: "18px", fontWeight: 600, margin: "0 0 12px 0" }}>Frequently Asked Questions</h2>
         <s-box padding="base">
-          {/* 2026-11-05 18:27 +03: FAQ "How much does each SMS cost?" (pricing, plan, rates) replaced by a balance question, no price wording (Shopify 1.2.1 pause), shp-strip-prices */}
-          <s-paragraph>
-            <strong>
-              Q: Where do the SMS credits come from?
-            </strong>
-          </s-paragraph>
-          <s-paragraph>
-            A: Each SMS uses credits from your kwtSMS account balance. Your
-            balance is shown at the top of every page in this app and in your
-            kwtSMS dashboard.
-          </s-paragraph>
-          <s-divider />
+          {/* 2026-11-06 00:58 +03: FAQ "Where do the SMS credits come from?" removed: no credit wording for App Store review (Boss 00:39), shp-fix-submit */}
 
           <s-paragraph>
             <strong>
@@ -103,7 +92,7 @@ export default function HelpPage() {
           </s-paragraph>
           <s-paragraph>
             A: Test Mode lets you simulate sending SMS without actually
-            delivering messages or using credits. It is useful for verifying
+            delivering messages. It is useful for verifying
             your templates and integration before going live.
           </s-paragraph>
           <s-divider />
