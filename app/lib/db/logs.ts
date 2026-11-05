@@ -1,5 +1,7 @@
 import db from "../../db.server";
 import { maskPhone } from "../kwtsms/phone";
+// 2026-11-06 00:20 +03: 90-day SMS log purge on log write, why (Shopify review 1.1.4), shp-fix-submit
+import { purgeOldLogsIfDue } from "./retention";
 
 export interface LogFilters {
   status?: string;
@@ -35,7 +37,12 @@ export async function createLog(data: {
   apiResponse?: string;
   testMode?: boolean;
 }) {
-  return db.smsLog.create({ data });
+  const log = await db.smsLog.create({ data });
+  // 2026-11-06 00:20 +03: also purge on write, for shops whose admin is never opened; throttled to once a day, never blocks the send, why (Shopify review 1.1.4), shp-fix-submit
+  purgeOldLogsIfDue(db).catch((err) => {
+    console.error("[retention] Purge failed:", err);
+  });
+  return log;
 }
 
 export async function getLogs(

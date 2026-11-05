@@ -1,10 +1,17 @@
 import { KwtSmsClient } from "../kwtsms";
 import db from "../../db.server";
 import { saveCredentials } from "../db/credentials";
+// 2026-11-06 00:20 +03: 90-day SMS log purge, runs at most daily, why (Shopify review 1.1.4), shp-fix-submit
+import { purgeOldLogsIfDue } from "../db/retention";
 
 const SYNC_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export async function syncShopIfStale(shop: string): Promise<void> {
+  // 2026-11-06 00:20 +03: purge logs older than 90 days before the credentials check, so shops without a gateway are covered too, why (Shopify review 1.1.4), shp-fix-submit
+  purgeOldLogsIfDue(db).catch((err) => {
+    console.error("[retention] Purge failed:", err);
+  });
+
   const creds = await db.gatewayCredentials.findUnique({ where: { shop } });
   if (!creds || !creds.credentialsVerified || !creds.username || !creds.password) {
     return;
