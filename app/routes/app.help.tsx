@@ -18,12 +18,13 @@ export default function HelpPage() {
         <s-box padding="base">
           <s-ordered-list>
             <s-list-item>
+              {/* 2026-11-06 00:45 +03: neutral signup label (was "kwtsms.com"), why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
               <strong>Create a kwtSMS account.</strong>{" "}
-              Visit{" "}
+              If you do not have one yet,{" "}
               <s-link href="https://www.kwtsms.com/signup" target="_blank">
-                kwtsms.com
-              </s-link>{" "}
-              and register for an account if you do not have one yet.
+                create a kwtSMS account
+              </s-link>
+              .
             </s-list-item>
             <s-list-item>
               <strong>Get your API credentials.</strong> Log
@@ -41,9 +42,10 @@ export default function HelpPage() {
               kwtSMS dashboard, register a Sender ID (up to 11 characters).
               This is the name recipients will see when they receive your SMS.
               {/* 2026-11-06 00:20 +03: link to sender-id-help.html (shows prices and a buy button) replaced by the support page, why (Shopify review 1.2.1), shp-fix-submit */}
-              For help, contact{" "}
-              <s-link href="https://www.kwtsms.com/support.html" target="_blank">
-                kwtSMS support
+              {/* 2026-11-06 00:45 +03: was www.kwtsms.com/support.html, now the app's own Sender ID page, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
+              See{" "}
+              <s-link href="https://notify.kwtsms.com/sender-id" target="_blank">
+                Sender ID help
               </s-link>
               .
             </s-list-item>
@@ -208,8 +210,9 @@ export default function HelpPage() {
               actual balance.
             </s-list-item>
             <s-list-item>
-              If credentials are correct but balance still shows zero,
-              your account may need to be topped up.
+              {/* 2026-11-06 00:45 +03: "topped up" wording removed, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
+              If credentials are correct, the balance shown is the balance
+              of your kwtSMS account.
             </s-list-item>
             <s-list-item>
               Contact kwtSMS support if the balance shown in the app does
@@ -225,17 +228,18 @@ export default function HelpPage() {
         <s-box padding="base">
           <s-unordered-list>
             {/* 2026-11-06 00:20 +03: removed kwtSMS home, FAQ, Sender ID help and best-practices links (pages show prices or buy buttons), added the API documentation, why (Shopify review 1.2.1), shp-fix-submit */}
+            {/* 2026-11-06 00:45 +03: www.kwtsms.com support.html and api-documentation links replaced by the app's own /support and /sender-id pages, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
             <s-list-item>
-              <s-link href="https://www.kwtsms.com/support.html" target="_blank">
-                Support Center
+              <s-link href="https://notify.kwtsms.com/support" target="_blank">
+                Support
               </s-link>{" "}
-              - Get help from the kwtSMS support team.
+              - Contact details, response hours and common questions.
             </s-list-item>
             <s-list-item>
-              <s-link href="https://www.kwtsms.com/api-documentation.html" target="_blank">
-                API Documentation
+              <s-link href="https://notify.kwtsms.com/sender-id" target="_blank">
+                Sender ID help
               </s-link>{" "}
-              - kwtSMS API reference and error codes.
+              - What a Sender ID is and how to request one.
             </s-list-item>
             <s-list-item>
               <s-link href="https://github.com/kwtsms/kwtsms-shopify/issues" target="_blank">

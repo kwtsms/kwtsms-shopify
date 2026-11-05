@@ -280,9 +280,10 @@ export default function GatewaySettings() {
               </s-paragraph>
               <div style={{ textAlign: "right" }}>
                 <s-text>
-                  * To add more countries, visit your{" "}
+                  {/* 2026-11-06 00:45 +03: neutral login label (was "kwtSMS dashboard"), why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
+                  * To add more countries,{" "}
                   <s-link href="https://www.kwtsms.com/login" target="_blank">
-                    kwtSMS dashboard
+                    log in to kwtSMS
                   </s-link>.
                 </s-text>
               </div>
@@ -316,9 +317,14 @@ export default function GatewaySettings() {
               <div style={{ textAlign: "right" }}>
                 {/* 2026-11-05 18:27 +03: "To buy a private Sender ID" now "To request", no buy call to action (Shopify 1.2.1 pause), shp-strip-prices */}
                 <s-text>
-                  * To request a private Sender ID, visit your{" "}
+                  {/* 2026-11-06 00:45 +03: request steps on the app's own /sender-id page, login label neutral, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
+                  * To request a private Sender ID, see{" "}
+                  <s-link href="https://notify.kwtsms.com/sender-id" target="_blank">
+                    Sender ID help
+                  </s-link>{" "}
+                  or{" "}
                   <s-link href="https://www.kwtsms.com/login" target="_blank">
-                    kwtSMS dashboard
+                    log in to kwtSMS
                   </s-link>.
                 </s-text>
               </div>

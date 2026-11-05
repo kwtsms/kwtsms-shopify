@@ -173,7 +173,8 @@ function StatusBar({ status }: { status: AppStatus }) {
           textDecoration: "none",
         }}
       >
-        kwtSMS Dashboard ↗
+        {/* 2026-11-06 00:45 +03: neutral login label (was "kwtSMS Dashboard"), why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
+        Log in to kwtSMS ↗
       </a>
     </div>
   );

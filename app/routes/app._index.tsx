@@ -90,8 +90,9 @@ export default function SettingsPage() {
           messages across Kuwait (Zain, Ooredoo, STC, Virgin) and internationally,
           with private Sender IDs and Arabic and English messages. This app uses
           your kwtSMS account. No account yet?{" "}
+          {/* 2026-11-06 00:45 +03: neutral signup label, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
           <s-link href="https://www.kwtsms.com/signup" target="_blank">
-            Sign up for a kwtSMS account
+            Create a kwtSMS account
           </s-link>
           .
         </s-paragraph>
