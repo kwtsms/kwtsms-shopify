@@ -40,7 +40,8 @@ export default function HelpPage() {
             <s-list-item>
               <strong>Register a Sender ID.</strong> In your
               kwtSMS dashboard, register a Sender ID (up to 11 characters).
-              This is the name recipients will see when they receive your SMS.
+              {/* 2026-11-06 00:50 +03: {" "} added, the JSX comments below joined "SMS." and "See" with no space, why (Shopify review, Boss 00:33), shp-fix-submit */}
+              This is the name recipients will see when they receive your SMS.{" "}
               {/* 2026-11-06 00:20 +03: link to sender-id-help.html (shows prices and a buy button) replaced by the support page, why (Shopify review 1.2.1), shp-fix-submit */}
               {/* 2026-11-06 00:45 +03: was www.kwtsms.com/support.html, now the app's own Sender ID page, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
               See{" "}
