@@ -1,7 +1,6 @@
 import type { LoaderFunctionArgs } from "react-router";
-import { redirect, Form, useLoaderData } from "react-router";
-
-import { login } from "../../shopify.server";
+// 2026-11-06 00:20 +03: dropped Form, useLoaderData and login, the shop-domain install form is gone, why (Shopify review 2.3.1), shp-fix-submit
+import { redirect } from "react-router";
 
 import styles from "./styles.module.css";
 
@@ -12,12 +11,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     throw redirect(`/app?${url.searchParams.toString()}`);
   }
 
-  return { showForm: Boolean(login) };
+  // 2026-11-06 00:20 +03: no showForm flag, the landing page no longer offers a shop-domain install form, why (Shopify review 2.3.1), shp-fix-submit
+  return null;
 };
 
 export default function App() {
-  const { showForm } = useLoaderData<typeof loader>();
-
   return (
     <div className={styles.page}>
       {/* ── Nav ── */}
@@ -378,9 +376,10 @@ export default function App() {
           <div className={styles.step}>
             <div className={styles.stepNumber}>1</div>
             <h3 className={styles.stepTitle}>Install the App</h3>
+            {/* 2026-11-06 00:20 +03: "No payment required" removed, neutral wording, why (Shopify review 1.2.1), shp-fix-submit */}
             <p className={styles.stepDesc}>
-              Find kwtSMS in the Shopify App Store and click Install. No
-              payment required.
+              Find kwtSMS in the Shopify App Store and click Install. Uses
+              your kwtSMS account.
             </p>
           </div>
           <div className={styles.step}>
@@ -480,29 +479,11 @@ export default function App() {
       <section className={styles.install} id="install">
         <h2 className={styles.installTitle}>Ready to connect your store?</h2>
         {/* 2026-11-05 18:27 +03: "It's free." removed, the app sends through the merchant's kwtSMS account (Shopify 1.2.1 pause), shp-strip-prices */}
+        {/* 2026-11-06 00:20 +03: shop-domain install form removed, installs start from the Shopify App Store only, why (Shopify review 2.3.1), shp-fix-submit */}
         <p className={styles.installSub}>
-          Enter your Shopify store domain to install the app. It uses your
-          kwtSMS account to send SMS.
+          Install kwtSMS from the Shopify App Store. It uses your kwtSMS
+          account to send SMS.
         </p>
-
-        {showForm && (
-          <Form
-            className={styles.installForm}
-            method="post"
-            action="/auth/login"
-          >
-            <input
-              className={styles.installInput}
-              type="text"
-              name="shop"
-              placeholder="your-store.myshopify.com"
-            />
-            <button className={styles.installButton} type="submit">
-              {/* 2026-11-05 18:27 +03: was "Install Free", no free or price claims (Shopify 1.2.1 pause), shp-strip-prices */}
-              Install App
-            </button>
-          </Form>
-        )}
       </section>
 
       {/* ── Footer ── */}
