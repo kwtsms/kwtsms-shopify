@@ -314,8 +314,9 @@ export default function GatewaySettings() {
                 <s-text>No sender IDs available. Contact kwtSMS to register a sender ID.</s-text>
               )}
               <div style={{ textAlign: "right" }}>
+                {/* 2026-11-05 18:27 +03: "To buy a private Sender ID" now "To request", no buy call to action (Shopify 1.2.1 pause), shp-strip-prices */}
                 <s-text>
-                  * To buy a private Sender ID, visit your{" "}
+                  * To request a private Sender ID, visit your{" "}
                   <s-link href="https://www.kwtsms.com/login" target="_blank">
                     kwtSMS dashboard
                   </s-link>.

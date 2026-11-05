@@ -10,8 +10,9 @@ const ERROR_MAP: Record<string, KwtSmsError> = {
   ERR007: { code: "ERR007", description: "More than 200 numbers", action: "Split into batches of 200 or fewer" },
   ERR008: { code: "ERR008", description: "Sender ID is banned", action: "Use a different sender ID or contact kwtSMS" },
   ERR009: { code: "ERR009", description: "Empty message", action: "Provide message content" },
-  ERR010: { code: "ERR010", description: "Zero balance", action: "Top up your kwtSMS account" },
-  ERR011: { code: "ERR011", description: "Insufficient balance", action: "Top up your kwtSMS account" },
+  // 2026-11-05 18:27 +03: ERR010/ERR011 action was "Top up your kwtSMS account"; no top-up call to action (Shopify 1.2.1 pause), shp-strip-prices
+  ERR010: { code: "ERR010", description: "Zero balance", action: "Your kwtSMS account balance is too low to send this message. Check the balance in your kwtSMS account" },
+  ERR011: { code: "ERR011", description: "Insufficient balance", action: "Your kwtSMS account balance is too low to send this message. Check the balance in your kwtSMS account" },
   ERR012: { code: "ERR012", description: "Message too long (>6 pages)", action: "Shorten message to 6 pages or fewer" },
   ERR013: { code: "ERR013", description: "Send queue full (1000 msgs)", action: "Retry with exponential backoff (30s, 60s, 120s)" },
   ERR019: { code: "ERR019", description: "No DLR reports found", action: "Wait 5+ minutes before checking DLR" },

@@ -116,14 +116,15 @@ export async function send(params: {
   }
 
   // ── Balance check (once, before sending) ──
+  // 2026-11-05 18:27 +03: text was "Insufficient SMS credits. Recharge at kwtsms.com"; no recharge call to action (Shopify 1.2.1 pause), shp-strip-prices
   if (availableBalance <= 0) {
     await createLog({
       shop, eventType, phone: normalized.join(","),
       recipientType, message, senderId,
       status: "failed", errorCode: "ZERO_BALANCE",
-      errorDescription: "Insufficient SMS credits. Recharge at kwtsms.com",
+      errorDescription: "Your kwtSMS account balance is too low to send this message.",
     });
-    return { success: false, error: "Insufficient SMS credits. Recharge at kwtsms.com" };
+    return { success: false, error: "Your kwtSMS account balance is too low to send this message." };
   }
 
   // ── Create client ──

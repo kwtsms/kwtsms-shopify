@@ -66,15 +66,16 @@ export default function HelpPage() {
       <s-section>
         <h2 style={{ fontSize: "18px", fontWeight: 600, margin: "0 0 12px 0" }}>Frequently Asked Questions</h2>
         <s-box padding="base">
+          {/* 2026-11-05 18:27 +03: FAQ "How much does each SMS cost?" (pricing, plan, rates) replaced by a balance question, no price wording (Shopify 1.2.1 pause), shp-strip-prices */}
           <s-paragraph>
             <strong>
-              Q: How much does each SMS cost?
+              Q: Where do the SMS credits come from?
             </strong>
           </s-paragraph>
           <s-paragraph>
-            A: SMS pricing depends on your kwtSMS account plan and the
-            destination country. Check your kwtSMS dashboard for current
-            rates. Each SMS uses &quot;points&quot; (credits) from your balance.
+            A: Each SMS uses credits from your kwtSMS account balance. Your
+            balance is shown at the top of every page in this app and in your
+            kwtSMS dashboard.
           </s-paragraph>
           <s-divider />
 

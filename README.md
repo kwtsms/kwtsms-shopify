@@ -11,13 +11,13 @@
 
 Automated SMS notifications for Shopify stores via the [kwtSMS](https://www.kwtsms.com) gateway. Send order confirmations, shipping updates, and more directly to your customers' phones. Full Arabic and English support.
 
-> Don't have a kwtSMS account? [Sign up free at kwtsms.com](https://www.kwtsms.com/signup) - no credit card, no contracts, setup in under 1 minute.
+> This app uses your kwtSMS account. No account yet? [Sign up for a kwtSMS account](https://www.kwtsms.com/signup).
 
 ---
 
 ## About kwtSMS
 
-kwtSMS is a Kuwaiti SMS gateway that delivers messages to 220+ countries, with private Sender ID, free API testing, non-expiring credits, and competitive flat-rate pricing. Secure, simple to integrate, built to last. In operation since 2007. [Get started](https://www.kwtsms.com/signup/)
+kwtSMS is a Kuwaiti SMS gateway that delivers messages to 220+ countries, with private Sender IDs and Arabic and English messages. Secure, simple to integrate, built to last. In operation since 2007. [Get started](https://www.kwtsms.com/signup/)
 
 ---
 

@@ -84,16 +84,16 @@ export default function SettingsPage() {
       <div style={{ marginTop: "16px" }} />
       <s-section>
         <h2 style={{ fontSize: "18px", fontWeight: 600, margin: "0 0 12px 0" }}>Welcome to kwtSMS</h2>
+        {/* 2026-11-05 18:27 +03: removed "free API testing, non-expiring credits, competitive flat-rate pricing", "free account" and "payment" wording (Shopify 1.2.1 pause); now points to the merchant's kwtSMS account and signup, shp-strip-prices */}
         <s-paragraph>
           kwtSMS is a Kuwait-based SMS gateway trusted by businesses to deliver
-          messages across Kuwait (Zain, Ooredoo, STC, Virgin) and internationally.
-          It offers private Sender IDs, free API testing, non-expiring credits,
-          and competitive flat-rate pricing. Open a free account in under one
-          minute at{" "}
+          messages across Kuwait (Zain, Ooredoo, STC, Virgin) and internationally,
+          with private Sender IDs and Arabic and English messages. This app uses
+          your kwtSMS account. No account yet?{" "}
           <s-link href="https://www.kwtsms.com/signup" target="_blank">
-            kwtsms.com
+            Sign up for a kwtSMS account
           </s-link>
-          , no paperwork or payment required.
+          .
         </s-paragraph>
         <s-paragraph>
           Connected shop: <strong>{shop}</strong>

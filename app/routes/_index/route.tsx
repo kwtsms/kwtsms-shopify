@@ -78,7 +78,8 @@ export default function App() {
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              Install Free
+              {/* 2026-11-05 18:27 +03: "Install Free" renamed, no free or price claims (Shopify 1.2.1 pause), shp-strip-prices */}
+              Install App
             </a>
           </li>
         </ul>
@@ -94,7 +95,8 @@ export default function App() {
 
         <div className={styles.badge}>
           <span className={styles.badgeDot} />
-          Free on Shopify App Store
+          {/* 2026-11-05 18:27 +03: badge was "Free on Shopify App Store", no free or price claims (Shopify 1.2.1 pause), shp-strip-prices */}
+          Uses your kwtSMS account
         </div>
 
         <h1 className={styles.heroTitle}>
@@ -119,7 +121,8 @@ export default function App() {
                 ?.scrollIntoView({ behavior: "smooth" });
             }}
           >
-            Install Free &rarr;
+            {/* 2026-11-05 18:27 +03: was "Install Free", no free or price claims (Shopify 1.2.1 pause), shp-strip-prices */}
+            Install App &rarr;
           </a>
           <a
             href="https://www.kwtsms.com"
@@ -131,8 +134,14 @@ export default function App() {
           </a>
         </div>
 
+        {/* 2026-11-05 18:27 +03: "100% Free app. Pay-as-you-go SMS. No contracts." removed, Shopify paused the app under 1.2.1 for priced claims; now points to the merchant's kwtSMS account and signup, shp-strip-prices */}
         <p className={styles.priceTag}>
-          <strong>100% Free app. Pay-as-you-go SMS. No contracts.</strong>
+          <strong>Uses your kwtSMS account.</strong>{" "}
+          No account yet?{" "}
+          <a href="https://www.kwtsms.com/signup" target="_blank" rel="noopener noreferrer">
+            Sign up for a kwtSMS account
+          </a>
+          .
           <br />
           Use your own private Sender ID so customers see your brand name, not a random name or number.
         </p>
@@ -149,13 +158,14 @@ export default function App() {
           <div className={styles.statNumber}>4</div>
           <div className={styles.statLabel} title="Zain, Ooredoo, stc, Virgin">Kuwait Networks</div>
         </div>
+        {/* 2026-11-05 18:27 +03: "Forever / Credits Never Expire" and "$0 / Monthly Fee" replaced by app facts, no price or credit-terms claims (Shopify 1.2.1 pause), shp-strip-prices */}
         <div className={styles.stat}>
-          <div className={styles.statNumber}>Forever</div>
-          <div className={styles.statLabel}>Credits Never Expire</div>
+          <div className={styles.statNumber}>6</div>
+          <div className={styles.statLabel}>SMS Events</div>
         </div>
         <div className={styles.stat}>
-          <div className={styles.statNumber}>$0</div>
-          <div className={styles.statLabel}>Monthly Fee</div>
+          <div className={styles.statNumber}>AR + EN</div>
+          <div className={styles.statLabel}>Arabic and English</div>
         </div>
       </div>
 
@@ -217,9 +227,10 @@ export default function App() {
               <div className={styles.featureIcon}>&#9783;</div>
               <h3 className={styles.featureTitle}>Detailed SMS Logs</h3>
             </div>
+            {/* 2026-11-05 18:27 +03: "cost tracking" now "credits used" (the logs page shows Credits Used), no cost wording (Shopify 1.2.1 pause), shp-strip-prices */}
             <p className={styles.featureDesc}>
-              Complete send history with delivery status, error codes, cost
-              tracking, and filters by event type or phone.
+              Complete send history with delivery status, error codes, credits
+              used, and filters by event type or phone.
             </p>
           </div>
 
@@ -468,8 +479,10 @@ export default function App() {
       {/* ── Install CTA ── */}
       <section className={styles.install} id="install">
         <h2 className={styles.installTitle}>Ready to connect your store?</h2>
+        {/* 2026-11-05 18:27 +03: "It's free." removed, the app sends through the merchant's kwtSMS account (Shopify 1.2.1 pause), shp-strip-prices */}
         <p className={styles.installSub}>
-          Enter your Shopify store domain to install the app. It&apos;s free.
+          Enter your Shopify store domain to install the app. It uses your
+          kwtSMS account to send SMS.
         </p>
 
         {showForm && (
@@ -485,7 +498,8 @@ export default function App() {
               placeholder="your-store.myshopify.com"
             />
             <button className={styles.installButton} type="submit">
-              Install Free
+              {/* 2026-11-05 18:27 +03: was "Install Free", no free or price claims (Shopify 1.2.1 pause), shp-strip-prices */}
+              Install App
             </button>
           </Form>
         )}
@@ -510,9 +524,10 @@ export default function App() {
           </a>
           <a href="/privacy">Privacy Policy</a>
         </div>
+        {/* 2026-11-05 18:27 +03: "a free app ... You only pay for SMS credits" removed, the Shopify reviewer quoted it under 1.2.1, shp-strip-prices */}
         <p>
-          kwtSMS for Shopify is a free app by kwtSMS. You only pay for SMS
-          credits through your kwtSMS account.
+          kwtSMS for Shopify is an app by kwtSMS. It uses your kwtSMS account
+          to send SMS.
         </p>
       </footer>
     </div>

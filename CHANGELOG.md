@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Docs and examples use the placeholder 965XXXXXXXX instead of a sample mobile number.
+- The app and its landing page no longer show prices or recharge links; they point to your kwtSMS account.
 
 ### Docs
 - Test mode: test messages are queued but not delivered. Their credits are held until you delete them from the Sending Queue in your kwtsms.com account.
