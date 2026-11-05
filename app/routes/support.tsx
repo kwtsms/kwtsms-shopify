@@ -9,6 +9,7 @@
  *            whose menus show prices. No prices, buy, recharge or top-up wording on this page.
  * USAGE:     Served by flatRoutes as /support; linked from the app's Help and public page footers and the listing.
  * DEPENDS:   app/components/PublicShell.tsx
+ * UPDATED:   2026-11-06 00:44 +03: FAQ no longer mentions credits or balance (Shopify 1.2.1, Boss 00:39), shp-fix-submit
  */
 import { PublicShell, SUPPORT_EMAIL } from "../components/PublicShell";
 
@@ -69,9 +70,7 @@ export default function Support() {
       <p>
         Turn on &quot;Test mode&quot; on the app&apos;s Settings page to try
         your setup without reaching any phone. kwtSMS accepts the messages but
-        does not deliver them. Their credits are held until you delete the
-        messages from the Sending Queue in your kwtSMS account. Turn test mode
-        off before you go live.
+        does not deliver them. Turn test mode off before you go live.
       </p>
 
       <h3>Why was an SMS not sent?</h3>
@@ -92,7 +91,7 @@ export default function Support() {
           The destination country is not active on your kwtSMS account (see
           Coverage on the Gateway page).
         </li>
-        <li>Your kwtSMS account balance is too low.</li>
+        <li>Your kwtSMS account cannot send right now (check it in your kwtSMS account).</li>
         <li>Test mode is on, so the message was not delivered.</li>
       </ul>
 
@@ -102,7 +101,8 @@ export default function Support() {
         app picks the language from the customer&apos;s language in Shopify,
         falling back to the language set on the Settings page. One Arabic SMS
         holds up to 70 characters (67 per part in longer messages), compared
-        with 160 (153) for English, so Arabic messages may use more credits.
+        with 160 (153) for English, so long Arabic messages are sent in more
+        parts.
       </p>
 
       <h3>Who receives the messages?</h3>
