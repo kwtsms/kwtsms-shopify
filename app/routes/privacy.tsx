@@ -47,7 +47,8 @@ export default function Privacy() {
           Privacy Policy
         </h1>
         <p style={{ color: "var(--text-light)", marginBottom: "32px" }}>
-          Last updated: March 15, 2026
+          {/* 2026-11-06 00:20 +03: date bumped, retention, uninstall and data request text now match the code, why (Shopify review 1.1.4), shp-fix-submit */}
+          Last updated: November 6, 2026
         </p>
 
         <h2>1. Introduction</h2>
@@ -151,9 +152,11 @@ export default function Privacy() {
 
         <h2>6. Data Retention</h2>
         <ul>
+          {/* 2026-11-06 00:20 +03: 90-day purge now runs in the daily sync (lib/db/retention.ts), why (Shopify review 1.1.4), shp-fix-submit */}
           <li>
             <strong>SMS logs</strong> are retained for 90 days, then
-            automatically deleted.
+            automatically deleted. You can also delete them at any time with
+            Clear Logs.
           </li>
           <li>
             <strong>SMS templates and settings</strong> are retained for as long
@@ -163,9 +166,12 @@ export default function Privacy() {
             <strong>kwtSMS credentials</strong> are deleted immediately when you
             disconnect your gateway account or uninstall the App.
           </li>
+          {/* 2026-11-06 00:20 +03: was "all your data is permanently deleted" on uninstall; credentials go at once, the rest on shop/redact 48 h later, why (Shopify review 1.1.4), shp-fix-submit */}
           <li>
-            When you uninstall the App, all your data (credentials, settings,
-            templates, and logs) is permanently deleted from our server.
+            When you uninstall the App, your kwtSMS credentials are deleted at
+            once. Your settings, templates, and logs are permanently deleted
+            when Shopify sends the shop data erasure request, 48 hours after
+            uninstall.
           </li>
         </ul>
 
@@ -174,10 +180,19 @@ export default function Privacy() {
           The App implements all three mandatory Shopify GDPR/privacy webhooks:
         </p>
         <ul>
+          {/* 2026-11-06 00:20 +03: was "we provide all SMS logs"; the webhook only records the request, data goes to the merchant on request, why (Shopify review 1.1.4), shp-fix-submit */}
           <li>
             <strong>Customer data request</strong>: when a customer requests
-            their data, we provide all SMS logs and stored information associated
-            with their phone number.
+            their data through Shopify, we record the request. On the store
+            owner&apos;s request through{" "}
+            <a
+              href="https://www.kwtsms.com/support.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              kwtSMS support
+            </a>{" "}
+            we provide a copy of all SMS logs associated with that phone number.
           </li>
           <li>
             <strong>Customer data erasure</strong>: when a customer requests
@@ -202,8 +217,10 @@ export default function Privacy() {
             <strong>Correction</strong>: request correction of inaccurate data.
           </li>
           <li>
+            {/* 2026-11-06 00:20 +03: was "Uninstalling the App automatically triggers full data deletion", now the real timing, why (Shopify review 1.1.4), shp-fix-submit */}
             <strong>Deletion</strong>: request permanent deletion of your data.
-            Uninstalling the App automatically triggers full data deletion.
+            Uninstalling the App deletes your kwtSMS credentials at once and
+            all other data 48 hours later.
           </li>
           <li>
             <strong>Data portability</strong>: request your data in a
