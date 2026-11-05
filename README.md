@@ -17,7 +17,7 @@ Automated SMS notifications for Shopify stores via the [kwtSMS](https://www.kwts
 
 ## About kwtSMS
 
-kwtSMS is a Kuwaiti SMS gateway trusted by 2,700+ businesses to deliver messages to 220+ countries, with private Sender ID, free API testing, non-expiring credits, and competitive flat-rate pricing. Secure, simple to integrate, built to last. 99.8% delivery rate, 18 years in operation since 2007. [Get started](https://www.kwtsms.com/signup/)
+kwtSMS is a Kuwaiti SMS gateway that delivers messages to 220+ countries, with private Sender ID, free API testing, non-expiring credits, and competitive flat-rate pricing. Secure, simple to integrate, built to last. In operation since 2007. [Get started](https://www.kwtsms.com/signup/)
 
 ---
 
@@ -45,7 +45,7 @@ kwtSMS is a Kuwaiti SMS gateway trusted by 2,700+ businesses to deliver messages
 
 ## Installation
 
-Install from the [Shopify App Store](#) (link available after marketplace approval).
+The app is not listed on the Shopify App Store yet. To install it on your store, contact [kwtSMS support](https://www.kwtsms.com/#contact).
 
 ## Configuration
 
