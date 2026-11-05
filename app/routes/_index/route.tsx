@@ -145,8 +145,9 @@ export default function App() {
           <div className={styles.statLabel}>Established Since 2007</div>
         </div>
         <div className={styles.stat}>
-          <div className={styles.statNumber}>99.8%</div>
-          <div className={styles.statLabel}>Delivery Rate</div>
+          {/* 2026-11-05 04:40 +03: unsourced "99.8% Delivery Rate" replaced by the 4 Kuwait networks; ported from ops 2a037d3 (Boss approval c3643), task #900 */}
+          <div className={styles.statNumber}>4</div>
+          <div className={styles.statLabel} title="Zain, Ooredoo, stc, Virgin">Kuwait Networks</div>
         </div>
         <div className={styles.stat}>
           <div className={styles.statNumber}>Forever</div>
