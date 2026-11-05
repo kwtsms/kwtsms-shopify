@@ -3,6 +3,8 @@ import type { LoaderFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 
 import styles from "./styles.module.css";
+// 2026-11-06 00:42 +03: shared public footer, why (Shopify review, Boss 00:33), shp-fix-submit
+import { PublicFooter } from "../../components/PublicShell";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -122,13 +124,9 @@ export default function App() {
             {/* 2026-11-05 18:27 +03: was "Install Free", no free or price claims (Shopify 1.2.1 pause), shp-strip-prices */}
             Install App &rarr;
           </a>
-          <a
-            href="https://www.kwtsms.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.btnSecondary}
-          >
-            About kwtSMS
+          {/* 2026-11-06 00:42 +03: was "About kwtSMS" to the www.kwtsms.com home page (menu shows prices), now the app's own support page, why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
+          <a href="/support" className={styles.btnSecondary}>
+            Get Support
           </a>
         </div>
 
@@ -136,12 +134,15 @@ export default function App() {
         <p className={styles.priceTag}>
           <strong>Uses your kwtSMS account.</strong>{" "}
           No account yet?{" "}
+          {/* 2026-11-06 00:42 +03: neutral signup label, why (Shopify review, Boss 00:33), shp-fix-submit */}
           <a href="https://www.kwtsms.com/signup" target="_blank" rel="noopener noreferrer">
-            Sign up for a kwtSMS account
+            Create a kwtSMS account
           </a>
           .
           <br />
-          Use your own private Sender ID so customers see your brand name, not a random name or number.
+          Use your own private Sender ID so customers see your brand name, not a random name or number.{" "}
+          {/* 2026-11-06 00:42 +03: points to the app's own Sender ID page, why (Shopify review, Boss 00:33), shp-fix-submit */}
+          <a href="/sender-id">About Sender IDs</a>.
         </p>
       </section>
 
@@ -487,30 +488,8 @@ export default function App() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className={styles.footer}>
-        <div className={styles.footerLinks}>
-          <a
-            href="https://www.kwtsms.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            kwtsms.com
-          </a>
-          <a
-            href="https://www.kwtsms.com/#contact"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Support
-          </a>
-          <a href="/privacy">Privacy Policy</a>
-        </div>
-        {/* 2026-11-05 18:27 +03: "a free app ... You only pay for SMS credits" removed, the Shopify reviewer quoted it under 1.2.1, shp-strip-prices */}
-        <p>
-          kwtSMS for Shopify is an app by kwtSMS. It uses your kwtSMS account
-          to send SMS.
-        </p>
-      </footer>
+      {/* 2026-11-06 00:42 +03: shared footer, links to /support, /sender-id and /privacy only (was www.kwtsms.com home and /#contact), why (Shopify review 1.2.1, Boss 00:33), shp-fix-submit */}
+      <PublicFooter />
     </div>
   );
 }
