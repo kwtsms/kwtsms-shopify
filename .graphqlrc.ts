@@ -8,7 +8,8 @@ function getConfig() {
     projects: {
       default: shopifyApiProject({
         apiType: ApiType.Admin,
-        apiVersion: ApiVersion.October25,
+        // 2026-11-09 08:06 +03: 2025-10 retired by Shopify on 2026-10-16; 2026-07 is supported to about mid-2027 (shopify-api-version)
+        apiVersion: ApiVersion.July26,
         documents: ["./app/**/*.{js,ts,jsx,tsx}", "./app/.server/**/*.{js,ts,jsx,tsx}"],
         outputDir: "./app/types",
       }),
