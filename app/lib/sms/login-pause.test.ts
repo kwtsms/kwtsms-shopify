@@ -48,7 +48,12 @@ function memoryStore() {
 
 function deps(store: LoginFailureStore) {
   const unverified: string[] = [];
-  const d: KwtsmsCallDeps = { store, markUnverified: async (shop) => { unverified.push(shop); } };
+  // 2026-11-11 16:37 +03: isVerified added (re-read before each call): a shop is verified until marked, task shopify-review-hotfix
+  const d: KwtsmsCallDeps = {
+    store,
+    markUnverified: async (shop) => { unverified.push(shop); },
+    isVerified: async (shop) => !unverified.includes(shop),
+  };
   return { d, unverified };
 }
 

@@ -10,7 +10,8 @@ import { isAccountError, loginThrottle } from "../lib/sms/account-guard";
 // 2026-11-11 16:36 +03: app-wide pause on logins after repeated failures, task shopify-review-hotfix
 import db from "../db.server";
 import { isLoginPaused, LOGIN_PAUSED_MESSAGE } from "../lib/sms/login-pause";
-import { LOGIN_PAUSED_CODE } from "../lib/sms/kwtsms-call";
+// 2026-11-11 16:37 +03: NOT_CONNECTED_CODE added (call refused after the login was marked unverified), task shopify-review-hotfix
+import { LOGIN_PAUSED_CODE, NOT_CONNECTED_CODE } from "../lib/sms/kwtsms-call";
 import { kwtsmsCall } from "../lib/sms/kwtsms-call.server";
 
 interface LoaderData {
@@ -132,7 +133,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // counts it towards the pause on logins after repeated failures, task shopify-review-hotfix
     const balanceResult = await kwtsmsCall(shop, "saved", () => client.balance());
     if (!balanceResult.ok) {
-      if (isAccountError(balanceResult.error.code)) {
+      // 2026-11-11 16:37 +03: also when refused because the login was marked unverified meanwhile, task shopify-review-hotfix
+      if (isAccountError(balanceResult.error.code) || balanceResult.error.code === NOT_CONNECTED_CODE) {
         return { intent, ok: false, error: `Reload failed: ${balanceResult.error.description}. Log in again with your API username and password.`, credentialsVerified: false } satisfies ActionData;
       }
       return { intent, ok: false, error: `Reload failed: ${balanceResult.error.description}` } satisfies ActionData;

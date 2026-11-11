@@ -10,6 +10,8 @@ import { updateBalanceFromResponse, syncBalance } from "./balance";
 import { isAccountError, isSyncDue } from "./account-guard";
 // 2026-11-11 16:36 +03: every kwtSMS call goes through kwtsmsCall (pause on logins after repeated failures), task shopify-review-hotfix
 import { kwtsmsCall } from "./kwtsms-call.server";
+// 2026-11-11 16:37 +03: code of a call refused because the login was marked unverified, task shopify-review-hotfix
+import { NOT_CONNECTED_CODE } from "./kwtsms-call";
 
 export interface SendResult {
   success: boolean;
@@ -117,7 +119,8 @@ export async function send(params: {
     const synced = await syncBalance(shop);
     if (synced.ok) {
       availableBalance = synced.data.available;
-    } else if (isAccountError(synced.error.code)) {
+    // 2026-11-11 16:37 +03: also stop when the call was refused because an earlier queued call marked the login unverified, task shopify-review-hotfix
+    } else if (isAccountError(synced.error.code) || synced.error.code === NOT_CONNECTED_CODE) {
       await createLog({
         shop, eventType, phone: normalized.join(","),
         recipientType, message, senderId,

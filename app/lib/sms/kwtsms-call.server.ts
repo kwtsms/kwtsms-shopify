@@ -18,6 +18,10 @@ import { callKwtsms, type CredentialMode, type KwtsmsCallDeps } from "./kwtsms-c
 const deps: KwtsmsCallDeps = {
   store: db,
   markUnverified: (shop) => saveCredentials(shop, { credentialsVerified: false }),
+  // 2026-11-11 16:37 +03: fresh read of the flag right before each call, task shopify-review-hotfix
+  isVerified: async (shop) =>
+    (await db.gatewayCredentials.findUnique({ where: { shop }, select: { credentialsVerified: true } }))
+      ?.credentialsVerified ?? false,
 };
 
 export function kwtsmsCall<T>(
