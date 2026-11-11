@@ -1,7 +1,8 @@
 import { KwtSmsClient, type Result, type BalanceResponse } from "../kwtsms";
 import { getCredentials, saveCredentials } from "../db/credentials";
-// 2026-11-11 16:06 +03: account error codes, stop retrying a login that failed, task shopify-review-hotfix
-import { isAccountError } from "./account-guard";
+// 2026-11-11 16:36 +03: was isAccountError from account-guard; the call now goes through kwtsmsCall, which counts a failed login
+// towards the app-wide pause and marks the login unverified, task shopify-review-hotfix
+import { kwtsmsCall } from "./kwtsms-call.server";
 
 export async function updateBalanceFromResponse(
   shop: string,
@@ -33,11 +34,9 @@ export async function syncBalance(
     password: creds.password,
   });
 
-  const result = await client.balance();
-  // 2026-11-11 16:06 +03: wrong login or unusable account: mark the login unverified so no more calls are made until the merchant logs in again on the Gateway page, task shopify-review-hotfix
-  if (!result.ok && isAccountError(result.error.code)) {
-    await saveCredentials(shop, { credentialsVerified: false });
-  }
+  // 2026-11-11 16:36 +03: via kwtsmsCall: a login or account error marks the login unverified (as before) and counts towards the
+  // pause on logins after repeated failures, task shopify-review-hotfix
+  const result = await kwtsmsCall(shop, "saved", () => client.balance());
   if (result.ok) {
     await saveCredentials(shop, {
       balanceAvailable: result.data.available,

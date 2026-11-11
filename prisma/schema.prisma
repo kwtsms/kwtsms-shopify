@@ -107,3 +107,14 @@ model WebhookDelivery {
 
   @@index([createdAt])
 }
+
+// 2026-11-11 16:33 +03: one row per failed kwtSMS login or account error (any shop), kept 1 hour, shared by all app
+// processes, so logins pause for every shop after 3 failures in 60 s, task shopify-review-hotfix
+model KwtsmsLoginFailure {
+  id        Int      @id @default(autoincrement())
+  shop      String   @db.VarChar(100)
+  code      String   @db.VarChar(20)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

@@ -7,6 +7,11 @@ import { KwtSmsClient, COUNTRY_NAMES } from "../lib/kwtsms";
 import { send } from "../lib/sms/sender";
 // 2026-11-11 16:06 +03: limit login attempts per shop and stop retrying a login that failed, task shopify-review-hotfix
 import { isAccountError, loginThrottle } from "../lib/sms/account-guard";
+// 2026-11-11 16:36 +03: app-wide pause on logins after repeated failures, task shopify-review-hotfix
+import db from "../db.server";
+import { isLoginPaused, LOGIN_PAUSED_MESSAGE } from "../lib/sms/login-pause";
+import { LOGIN_PAUSED_CODE } from "../lib/sms/kwtsms-call";
+import { kwtsmsCall } from "../lib/sms/kwtsms-call.server";
 
 interface LoaderData {
   username: string;
@@ -58,6 +63,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     // 2026-11-11 16:06 +03: at most 5 login attempts per shop in 10 minutes; the kwtSMS server stops answering an address after
     // repeated failed logins, and every shop shares this server's address, task shopify-review-hotfix
+    // 2026-11-11 16:36 +03: app-wide pause on logins after repeated failures (all shops), checked before the per-shop limit so a
+    // paused try does not use up the shop's attempts, task shopify-review-hotfix
+    if ((await isLoginPaused(db)).paused) {
+      return { intent, ok: false, error: LOGIN_PAUSED_MESSAGE } satisfies ActionData;
+    }
+
     const gate = loginThrottle.attempt(shop);
     if (!gate.allowed) {
       const minutes = Math.max(1, Math.ceil(gate.retryAfterMs / 60000));
@@ -68,15 +79,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const client = new KwtSmsClient({ username, password });
-    const balanceResult = await client.balance();
+    // 2026-11-11 16:36 +03: via kwtsmsCall: refused while logins are paused, a failed login is counted, task shopify-review-hotfix
+    const balanceResult = await kwtsmsCall(shop, "new", () => client.balance());
     if (!balanceResult.ok) {
+      if (balanceResult.error.code === LOGIN_PAUSED_CODE) {
+        return { intent, ok: false, error: LOGIN_PAUSED_MESSAGE } satisfies ActionData;
+      }
       return { intent, ok: false, error: "Invalid credentials. Please check your API username and password." } satisfies ActionData;
     }
 
-    const senderResult = await client.senderIds();
+    // 2026-11-11 16:36 +03: via kwtsmsCall ("proven": the login just worked), so any failure is still counted, task shopify-review-hotfix
+    const senderResult = await kwtsmsCall(shop, "proven", () => client.senderIds());
     const senderIds = senderResult.ok ? senderResult.data.senderid : [];
 
-    const coverageResult = await client.coverage();
+    const coverageResult = await kwtsmsCall(shop, "proven", () => client.coverage());
     const coverage = coverageResult.ok ? coverageResult.data.prefixes : [];
 
     const defaultSenderId = senderIds.length > 0 ? senderIds[0] : "";
@@ -112,16 +128,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
     const client = new KwtSmsClient({ username: creds.username, password: creds.password });
     // 2026-11-11 16:06 +03: was three calls at once; balance first, and stop on a login or account error, task shopify-review-hotfix
-    const balanceResult = await client.balance();
+    // 2026-11-11 16:36 +03: via kwtsmsCall, which marks the login unverified on a login or account error (was done here) and
+    // counts it towards the pause on logins after repeated failures, task shopify-review-hotfix
+    const balanceResult = await kwtsmsCall(shop, "saved", () => client.balance());
     if (!balanceResult.ok) {
       if (isAccountError(balanceResult.error.code)) {
-        await saveCredentials(shop, { credentialsVerified: false });
         return { intent, ok: false, error: `Reload failed: ${balanceResult.error.description}. Log in again with your API username and password.`, credentialsVerified: false } satisfies ActionData;
       }
       return { intent, ok: false, error: `Reload failed: ${balanceResult.error.description}` } satisfies ActionData;
     }
-    const senderResult = await client.senderIds();
-    const coverageResult = await client.coverage();
+    // 2026-11-11 16:36 +03: via kwtsmsCall so a failed login here is counted too, task shopify-review-hotfix
+    const senderResult = await kwtsmsCall(shop, "saved", () => client.senderIds());
+    const coverageResult = await kwtsmsCall(shop, "saved", () => client.coverage());
     const senderIds = senderResult.ok ? senderResult.data.senderid : [];
     const coverage = coverageResult.ok ? coverageResult.data.prefixes : [];
     await saveCredentials(shop, {

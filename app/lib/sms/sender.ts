@@ -1,5 +1,6 @@
 import { KwtSmsClient, normalize, cleanMessage, countPages } from "../kwtsms";
-import { getCredentials, saveCredentials } from "../db/credentials";
+// 2026-11-11 16:36 +03: saveCredentials no longer used here (kwtsmsCall marks the login unverified), task shopify-review-hotfix
+import { getCredentials } from "../db/credentials";
 import { getSetting } from "../db/settings";
 import { getTemplate } from "../db/templates";
 import { createLog } from "../db/logs";
@@ -7,6 +8,8 @@ import { renderTemplate, type TemplateData } from "./templates";
 import { updateBalanceFromResponse, syncBalance } from "./balance";
 // 2026-11-11 16:06 +03: stop retrying a login that failed, task shopify-review-hotfix
 import { isAccountError, isSyncDue } from "./account-guard";
+// 2026-11-11 16:36 +03: every kwtSMS call goes through kwtsmsCall (pause on logins after repeated failures), task shopify-review-hotfix
+import { kwtsmsCall } from "./kwtsms-call.server";
 
 export interface SendResult {
   success: boolean;
@@ -163,10 +166,12 @@ export async function send(params: {
   }
 
   // ── Send ──
-  const result = await client.send(normalized, cleanedMessage, {
+  // 2026-11-11 16:36 +03: via kwtsmsCall: a login or account error marks the login unverified and counts towards the pause on
+  // logins after repeated failures, task shopify-review-hotfix
+  const result = await kwtsmsCall(shop, "saved", () => client.send(normalized, cleanedMessage, {
     senderId,
     test: testMode,
-  });
+  }));
 
   if (result.ok) {
     await createLog({
@@ -191,10 +196,7 @@ export async function send(params: {
   }
 
   // ── Failed ──
-  // 2026-11-11 16:06 +03: login or account error on send: mark the login unverified so later orders make no API call until the merchant logs in again, task shopify-review-hotfix
-  if (isAccountError(result.error.code)) {
-    await saveCredentials(shop, { credentialsVerified: false });
-  }
+  // 2026-11-11 16:36 +03: the login is marked unverified on a login or account error inside kwtsmsCall (was here), task shopify-review-hotfix
 
   await createLog({
     shop, eventType, phone: normalized.join(","),

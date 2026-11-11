@@ -5,6 +5,8 @@ import { saveCredentials } from "../db/credentials";
 import { purgeOldLogsIfDue } from "../db/retention";
 // 2026-11-11 16:06 +03: sync in order and stop after a login or account error, retry a failed sync at most once an hour, task shopify-review-hotfix
 import { isSyncDue, syncAccount } from "../sms/account-guard";
+// 2026-11-11 16:36 +03: pause on logins after repeated failures, shared by every path, task shopify-review-hotfix
+import { kwtsmsCall } from "../sms/kwtsms-call.server";
 
 export async function syncShopIfStale(shop: string): Promise<void> {
   // 2026-11-06 00:20 +03: purge logs older than 90 days before the credentials check, so shops without a gateway are covered too, why (Shopify review 1.1.4), shp-fix-submit
@@ -37,11 +39,18 @@ async function syncShop(
   password: string,
 ): Promise<void> {
   const client = new KwtSmsClient({ username, password });
-  const result = await syncAccount(client, {
+  // 2026-11-11 16:36 +03: each call goes through kwtsmsCall, which counts a failed login towards the pause on logins after
+  // repeated failures and marks the login unverified itself (so markUnverified here has nothing left to do), task shopify-review-hotfix
+  const counted = {
+    balance: () => kwtsmsCall(shop, "saved", () => client.balance()),
+    senderIds: () => kwtsmsCall(shop, "saved", () => client.senderIds()),
+    coverage: () => kwtsmsCall(shop, "saved", () => client.coverage()),
+  };
+  const result = await syncAccount(counted, {
     save: async (update) => {
       if (Object.keys(update).length > 0) await saveCredentials(shop, update);
     },
-    markUnverified: () => saveCredentials(shop, { credentialsVerified: false }),
+    markUnverified: async () => {},
   });
   if (!result.ok) {
     console.error(`[sync] Failed for ${shop}: ${result.errorCode}`);
