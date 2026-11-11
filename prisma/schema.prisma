@@ -100,7 +100,10 @@ model SmsLog {
 // delivery of the same webhook does not send the SMS again, task shopify-review-hotfix
 model WebhookDelivery {
   id        Int      @id @default(autoincrement())
-  webhookId String   @unique @db.VarChar(100)
+  // 2026-11-11 16:38 +03: webhookId optional; resourceKey added (sha256 of shop + topic + resource id), unique, so the same
+  // event sent again with a new delivery id is also skipped, task shopify-review-hotfix
+  webhookId   String?  @unique @db.VarChar(100)
+  resourceKey String?  @unique @db.VarChar(64)
   shop      String   @db.VarChar(100)
   topic     String   @db.VarChar(50)
   createdAt DateTime @default(now())

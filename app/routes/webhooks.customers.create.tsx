@@ -11,7 +11,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   // 2026-11-11 16:11 +03: was awaited before the 200, so a slow kwtSMS call made Shopify deliver again and the SMS went twice;
   // now a repeated delivery id is skipped and the SMS work runs after the response, task shopify-review-hotfix
-  if (await claimWebhook(db, webhookId, shop, topic)) {
+  // 2026-11-11 16:38 +03: payload passed for the second key (topic + resource id), task shopify-review-hotfix
+  if (await claimWebhook(db, webhookId, shop, topic, payload)) {
     void runAfterResponse(topic, shop, () => handleCustomerCreated(shop, payload));
   }
 
