@@ -8,62 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Requests to kwtSMS carry the integration name and version (no personal data) so kwtSMS can see which integrations are in use.
-- SMS logs older than 90 days are deleted automatically, as the privacy policy states.
-- Support page (notify.kwtsms.com/support): contact e-mail, what to include, response hours and common questions.
-- Sender ID page (notify.kwtsms.com/sender-id): what a Sender ID is, the default sender, how to request your own and where to choose it in the app.
-
-### Fixed
-- Uninstalling the app deletes your stored kwtSMS credentials at once; settings, templates and logs follow with Shopify's shop data erasure request 48 hours later.
-- Privacy webhooks (customer data request, customer erasure, shop erasure) always answer Shopify once verified, so a temporary database error no longer causes repeated retries.
-- Customer erasure no longer risks matching every log of the store when the customer's phone has no digits.
+- Integration name and version sent with requests.
+- Automatic cleanup of old SMS logs.
+- Support page and Sender ID page.
+- Initial release: gateway login, settings, templates (English and Arabic), logs, help, status bar, order, fulfillment and customer SMS notifications, daily sync, welcome SMS and test SMS.
 
 ### Changed
-- Docs and examples use the placeholder 965XXXXXXXX instead of a sample mobile number.
-- The app and its landing page no longer show prices or recharge links; they point to your kwtSMS account.
-- The privacy policy describes exactly what happens on uninstall and on a customer data request (the request is recorded; the store owner gets the customer's SMS logs on request through kwtSMS support).
-- Help page links go to kwtSMS support and the API documentation only; links to pages with prices or buy buttons were removed.
-- The landing page no longer has a store-domain install form; the app is installed from the Shopify App Store. Setup step 1 says "Uses your kwtSMS account".
-- Links in the app and on its public pages to the kwtsms.com home, contact, support and API documentation pages now go to the app's own Support and Sender ID pages. Only the signup and login links to kwtsms.com remain, labelled "Create a kwtSMS account" and "Log in to kwtSMS".
-- The landing, support, Sender ID and privacy pages share one footer with Support, Sender ID and Privacy Policy links.
-- The privacy policy names Delete All Logs on the Logs page for deleting SMS logs at any time, and its contact section gives the support e-mail and the Support page.
-
-### Removed
-- The unused template page /app/additional.
-
-### Docs
-- Test mode: test messages are queued but not delivered. Their credits are held until you delete them from the Sending Queue in your kwtsms.com account.
-- ERR028: opt-in Duplicate SMS protection with a per-account window (10 seconds by default), not a fixed 15 seconds.
-
-### Added
-- Initial project scaffolding from Shopify React Router template
-- Prisma database schema (GatewayCredentials, Settings, SmsTemplate, SmsLog)
-- kwtSMS API client with full error code mapping (ERR001-ERR033)
-- Phone normalization (Arabic/Hindi digits, stripping, country code prepending)
-- Message cleaning (emoji strip, HTML strip, control char removal, Arabic preserved)
-- SMS send orchestration via `sendSms()` with balance and coverage guards
-- Gateway settings page (login, logout, reload, sender ID, coverage, test SMS)
-- Settings page (SMS toggle, test mode, notification events, defaults, debug logging)
-- Templates page with vertical tabs layout (6 event types, EN/AR, recipient type)
-- Logs page with status/event filters and pagination
-- Help page (setup guide, FAQ, troubleshooting, error codes, useful links)
-- Integrations page (stub for future integrations)
-- Global status bar (SMS status, gateway, mode, balance, sender, today sent, dashboard link)
-- 13 webhook handlers (orders, fulfillments, customers, privacy)
-- Notification handlers for order, fulfillment, customer, and privacy events
-- Default template seeding on install (individual missing template seeding)
-- Daily sync job (lazy, triggered on page load if >24h stale)
-- Debug logging to server console (toggled from settings)
-- Country names map (~180 countries) for coverage and settings display
-- Auto-set first sender ID on gateway login
-- New Customer (Welcome SMS) notification event and template
-- Test SMS with timestamp appended to message
-- Manual test plan documentation
-- Competitive analysis
-- Marketplace submission guide
-- Product Requirements Document (PRD)
-- 18-task implementation plan with Phase 2-4 roadmap
-
-### Removed
-- fulfillment_created template (redundant with order_shipped/order_partially_fulfilled)
-- Dead settings (test_mode, notify_low_stock from settings table)
+- App and public pages simplified.
+- Bug fixes.
