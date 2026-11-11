@@ -112,7 +112,8 @@ test("the SMS work runs after the caller returns and its error is caught", async
   const order: string[] = [];
   let release!: () => void;
   const gate = new Promise<void>((r) => { release = r; });
-  const done = runAfterResponse("ORDERS_CREATE", "a.myshopify.com", async () => {
+  // 2026-11-11 16:39 +03: delivery id argument added, task shopify-review-hotfix
+  const done = runAfterResponse("ORDERS_CREATE", "a.myshopify.com", "wh-1", async () => {
     await gate;
     order.push("work");
     throw new Error("send failed");
@@ -168,4 +169,23 @@ test("no delivery id but a resource id: the resource key alone skips the copy", 
   const { store } = memoryStore();
   assert.equal(await claimWebhook(store, undefined, "a.myshopify.com", "ORDERS_PAID", { id: 9 }), true);
   assert.equal(await claimWebhook(store, undefined, "a.myshopify.com", "ORDERS_PAID", { id: 9 }), false);
+});
+
+// 2026-11-11 16:39 +03: started and done/failed log lines, without phone numbers or message text, task shopify-review-hotfix
+test("started and done/failed lines are logged, with no phone number or message text", async (t) => {
+  const lines: string[] = [];
+  t.mock.method(console, "log", (...a: unknown[]) => { lines.push(a.map(String).join(" ")); });
+  t.mock.method(console, "error", (...a: unknown[]) => { lines.push(a.map(String).join(" ")); });
+  const phone = "96512345678";
+  await runAfterResponse("ORDERS_PAID", "a.myshopify.com", "wh-7", async () => ({ success: false, error: `Invalid phone number: ${phone}` }));
+  await runAfterResponse("ORDERS_PAID", "a.myshopify.com", "wh-8", async () => ({ success: true, msgId: "m1" }));
+  await runAfterResponse("ORDERS_PAID", "a.myshopify.com", undefined, async () => { throw new Error(`could not save ${phone} Hello Ali`); });
+  assert.deepEqual(lines, [
+    "[webhook] started shop=a.myshopify.com topic=ORDERS_PAID delivery=wh-7",
+    "[webhook] done shop=a.myshopify.com topic=ORDERS_PAID delivery=wh-7 sent=no",
+    "[webhook] started shop=a.myshopify.com topic=ORDERS_PAID delivery=wh-8",
+    "[webhook] done shop=a.myshopify.com topic=ORDERS_PAID delivery=wh-8 sent=yes",
+    "[webhook] started shop=a.myshopify.com topic=ORDERS_PAID delivery=none",
+    "[webhook] failed shop=a.myshopify.com topic=ORDERS_PAID delivery=none reason=Error",
+  ]);
 });

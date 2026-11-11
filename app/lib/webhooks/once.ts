@@ -8,7 +8,9 @@
  *            and runs the SMS work after the 200 response is returned.
  * WHY:       Shopify delivers the same webhook again when the first answer is slow or lost; each repeat sent the
  *            customer the same SMS again. Ignore repeated webhook deliveries and answer Shopify at once.
- * USAGE:     if (await claimWebhook(db, webhookId, shop, topic)) runAfterResponse(topic, shop, () => handler(...));
+ * USAGE:     if (await claimWebhook(db, webhookId, shop, topic, payload))
+ *              runAfterResponse(topic, shop, webhookId, () => handler(...));
+ *            (2026-11-11 16:39 +03: payload and webhookId arguments added, task shopify-review-hotfix)
  *            return new Response();
  * DEPENDS:   a Prisma-like client with webhookDelivery.create and deleteMany; only node:crypto at runtime, so
  *            node --test can load it directly.
@@ -101,10 +103,29 @@ export async function claimWebhook(
 }
 
 /** Starts the work without waiting, so the route can answer Shopify at once; logs the result or the error. */
-export function runAfterResponse(topic: string, shop: string, work: () => Promise<unknown>): Promise<void> {
-  return work()
-    .then((result) => console.log(`[webhook] ${topic} result:`, result))
-    .catch((err) => console.error(`[webhook] ${topic} handler failed for ${shop}:`, err));
+// 2026-11-11 16:39 +03: was one "result" line that printed the whole result (it can hold a phone number); now a "started"
+// line when the work begins and a "done" or "failed" line when it ends (shop, topic, delivery id, sent yes/no; no phone
+// number, no message text), so work cut off by a restart shows as "started" with no end line, task shopify-review-hotfix
+export function runAfterResponse(
+  topic: string,
+  shop: string,
+  webhookId: string | null | undefined,
+  work: () => Promise<unknown>,
+): Promise<void> {
+  const tag = `shop=${shop} topic=${topic} delivery=${webhookId ?? "none"}`;
+  console.log(`[webhook] started ${tag}`);
+  return Promise.resolve()
+    .then(work)
+    .then((result) => {
+      const sent = typeof result === "object" && result !== null && (result as { success?: unknown }).success === true;
+      console.log(`[webhook] done ${tag} sent=${sent ? "yes" : "no"}`);
+    })
+    .catch((err) => {
+      // error name and code only: a database error message can hold the phone number it tried to write
+      const name = err instanceof Error ? err.name : "error";
+      const code = typeof err === "object" && err !== null ? (err as { code?: unknown }).code : undefined;
+      console.error(`[webhook] failed ${tag} reason=${name}${typeof code === "string" ? ` code=${code}` : ""}`);
+    });
 }
 
 /** Test helper: forget the last purge so the next call purges. */

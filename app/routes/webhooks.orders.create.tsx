@@ -13,7 +13,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   // now a repeated delivery id is skipped and the SMS work runs after the response, task shopify-review-hotfix
   // 2026-11-11 16:38 +03: payload passed for the second key (topic + resource id), task shopify-review-hotfix
   if (await claimWebhook(db, webhookId, shop, topic, payload)) {
-    void runAfterResponse(topic, shop, () => handleOrderCreated(shop, payload));
+    // 2026-11-11 16:39 +03: delivery id passed for the started/done log lines, task shopify-review-hotfix
+    void runAfterResponse(topic, shop, webhookId, () => handleOrderCreated(shop, payload));
   }
 
   return new Response();
