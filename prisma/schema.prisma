@@ -95,3 +95,15 @@ model SmsLog {
   @@index([createdAt])
   @@index([shop, eventType])
 }
+
+// 2026-11-11 16:11 +03: one row per handled Shopify webhook delivery (X-Shopify-Webhook-Id), unique, kept 7 days, so a repeated
+// delivery of the same webhook does not send the SMS again, task shopify-review-hotfix
+model WebhookDelivery {
+  id        Int      @id @default(autoincrement())
+  webhookId String   @unique @db.VarChar(100)
+  shop      String   @db.VarChar(100)
+  topic     String   @db.VarChar(50)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
