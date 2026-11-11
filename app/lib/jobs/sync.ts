@@ -3,8 +3,8 @@ import db from "../../db.server";
 import { saveCredentials } from "../db/credentials";
 // 2026-11-06 00:20 +03: 90-day SMS log purge, runs at most daily, why (Shopify review 1.1.4), shp-fix-submit
 import { purgeOldLogsIfDue } from "../db/retention";
-
-const SYNC_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
+// 2026-11-11 16:06 +03: sync in order and stop after a login or account error, retry a failed sync at most once an hour, task shopify-review-hotfix
+import { isSyncDue, syncAccount } from "../sms/account-guard";
 
 export async function syncShopIfStale(shop: string): Promise<void> {
   // 2026-11-06 00:20 +03: purge logs older than 90 days before the credentials check, so shops without a gateway are covered too, why (Shopify review 1.1.4), shp-fix-submit
@@ -17,10 +17,11 @@ export async function syncShopIfStale(shop: string): Promise<void> {
     return;
   }
 
-  const lastSync = creds.balanceUpdatedAt?.getTime() ?? 0;
-  if (Date.now() - lastSync < SYNC_INTERVAL_MS) {
+  // 2026-11-11 16:06 +03: was "older than 24 h" only; a failed sync now waits an hour before the next try, task shopify-review-hotfix
+  if (!isSyncDue(Date.now(), creds.balanceUpdatedAt, creds.syncAttemptedAt)) {
     return;
   }
+  await saveCredentials(shop, { syncAttemptedAt: new Date() });
 
   // Run sync in background, don't block page load
   syncShop(shop, creds.username, creds.password).catch((err) => {
@@ -28,35 +29,21 @@ export async function syncShopIfStale(shop: string): Promise<void> {
   });
 }
 
+// 2026-11-11 16:06 +03: was three calls at once (balance, sender IDs, coverage) that all failed together on a wrong login, and the
+// failure was never recorded; now one call at a time via syncAccount, which stops and marks the login unverified, task shopify-review-hotfix
 async function syncShop(
   shop: string,
   username: string,
   password: string,
 ): Promise<void> {
   const client = new KwtSmsClient({ username, password });
-
-  const [balanceResult, senderResult, coverageResult] = await Promise.all([
-    client.balance(),
-    client.senderIds(),
-    client.coverage(),
-  ]);
-
-  const update: Record<string, unknown> = {};
-
-  if (balanceResult.ok) {
-    update.balanceAvailable = balanceResult.data.available;
-    update.balancePurchased = balanceResult.data.purchased;
-  }
-
-  if (senderResult.ok) {
-    update.senderIds = senderResult.data.senderid;
-  }
-
-  if (coverageResult.ok) {
-    update.coverage = coverageResult.data.prefixes;
-  }
-
-  if (Object.keys(update).length > 0) {
-    await saveCredentials(shop, update as Parameters<typeof saveCredentials>[1]);
+  const result = await syncAccount(client, {
+    save: async (update) => {
+      if (Object.keys(update).length > 0) await saveCredentials(shop, update);
+    },
+    markUnverified: () => saveCredentials(shop, { credentialsVerified: false }),
+  });
+  if (!result.ok) {
+    console.error(`[sync] Failed for ${shop}: ${result.errorCode}`);
   }
 }

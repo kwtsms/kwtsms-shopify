@@ -19,6 +19,8 @@ export async function saveCredentials(
     balanceAvailable?: number;
     balancePurchased?: number;
     credentialsVerified?: boolean;
+    // 2026-11-11 16:06 +03: last sync attempt time, to retry a failed sync at most once an hour, task shopify-review-hotfix
+    syncAttemptedAt?: Date;
   },
 ) {
   const updateData: Record<string, unknown> = {};
@@ -32,6 +34,7 @@ export async function saveCredentials(
   if (data.balanceAvailable !== undefined) updateData.balanceAvailable = data.balanceAvailable;
   if (data.balancePurchased !== undefined) updateData.balancePurchased = data.balancePurchased;
   if (data.credentialsVerified !== undefined) updateData.credentialsVerified = data.credentialsVerified;
+  if (data.syncAttemptedAt !== undefined) updateData.syncAttemptedAt = data.syncAttemptedAt;
   if (data.balanceAvailable !== undefined || data.balancePurchased !== undefined) {
     updateData.balanceUpdatedAt = new Date();
   }

@@ -39,6 +39,8 @@ model GatewayCredentials {
   balanceAvailable    Float     @default(0)
   balancePurchased    Float     @default(0)
   balanceUpdatedAt    DateTime?
+  // 2026-11-11 16:06 +03: time of the last balance sync attempt (success or not), so a failed sync is tried at most once an hour, task shopify-review-hotfix
+  syncAttemptedAt     DateTime?
   credentialsVerified Boolean   @default(false)
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt

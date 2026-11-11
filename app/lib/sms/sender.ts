@@ -1,10 +1,12 @@
 import { KwtSmsClient, normalize, cleanMessage, countPages } from "../kwtsms";
-import { getCredentials } from "../db/credentials";
+import { getCredentials, saveCredentials } from "../db/credentials";
 import { getSetting } from "../db/settings";
 import { getTemplate } from "../db/templates";
 import { createLog } from "../db/logs";
 import { renderTemplate, type TemplateData } from "./templates";
 import { updateBalanceFromResponse, syncBalance } from "./balance";
+// 2026-11-11 16:06 +03: stop retrying a login that failed, task shopify-review-hotfix
+import { isAccountError, isSyncDue } from "./account-guard";
 
 export interface SendResult {
   success: boolean;
@@ -105,13 +107,23 @@ export async function send(params: {
   }
 
   // ── Sync balance if stale (>24 hours) ──
+  // 2026-11-11 16:06 +03: was "older than 24 h" only, so a failing sync ran again on every send; now also at most once an hour, and a
+  // login or account error stops the send (syncBalance marks the login unverified), task shopify-review-hotfix
   let availableBalance = creds.balanceAvailable;
-  const STALE_MS = 24 * 60 * 60 * 1000;
-  const lastSync = creds.balanceUpdatedAt ? new Date(creds.balanceUpdatedAt).getTime() : 0;
-  if (Date.now() - lastSync > STALE_MS) {
+  if (isSyncDue(Date.now(), creds.balanceUpdatedAt, creds.syncAttemptedAt)) {
     const synced = await syncBalance(shop);
     if (synced.ok) {
       availableBalance = synced.data.available;
+    } else if (isAccountError(synced.error.code)) {
+      await createLog({
+        shop, eventType, phone: normalized.join(","),
+        recipientType, message, senderId,
+        status: "failed",
+        errorCode: synced.error.code,
+        errorDescription: synced.error.description,
+        testMode,
+      });
+      return { success: false, error: "Gateway not connected. Go to Gateway page to log in." };
     }
   }
 
@@ -179,6 +191,11 @@ export async function send(params: {
   }
 
   // ── Failed ──
+  // 2026-11-11 16:06 +03: login or account error on send: mark the login unverified so later orders make no API call until the merchant logs in again, task shopify-review-hotfix
+  if (isAccountError(result.error.code)) {
+    await saveCredentials(shop, { credentialsVerified: false });
+  }
+
   await createLog({
     shop, eventType, phone: normalized.join(","),
     recipientType, message: cleanedMessage, senderId,

@@ -5,6 +5,8 @@ import { authenticate } from "../shopify.server";
 import { getCredentials, saveCredentials, clearCredentials } from "../lib/db/credentials";
 import { KwtSmsClient, COUNTRY_NAMES } from "../lib/kwtsms";
 import { send } from "../lib/sms/sender";
+// 2026-11-11 16:06 +03: limit login attempts per shop and stop retrying a login that failed, task shopify-review-hotfix
+import { isAccountError, loginThrottle } from "../lib/sms/account-guard";
 
 interface LoaderData {
   username: string;
@@ -54,6 +56,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return { intent, ok: false, error: "Username and password are required." } satisfies ActionData;
     }
 
+    // 2026-11-11 16:06 +03: at most 5 login attempts per shop in 10 minutes; the kwtSMS server stops answering an address after
+    // repeated failed logins, and every shop shares this server's address, task shopify-review-hotfix
+    const gate = loginThrottle.attempt(shop);
+    if (!gate.allowed) {
+      const minutes = Math.max(1, Math.ceil(gate.retryAfterMs / 60000));
+      return {
+        intent, ok: false,
+        error: `Too many login attempts. Wait ${minutes} minute${minutes === 1 ? "" : "s"}, then check your API username and password and try again.`,
+      } satisfies ActionData;
+    }
+
     const client = new KwtSmsClient({ username, password });
     const balanceResult = await client.balance();
     if (!balanceResult.ok) {
@@ -93,15 +106,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (!creds?.username || !creds?.password) {
       return { intent, ok: false, error: "Credentials not configured." } satisfies ActionData;
     }
+    // 2026-11-11 16:06 +03: a login marked unverified is not used again until the merchant logs in, task shopify-review-hotfix
+    if (!creds.credentialsVerified) {
+      return { intent, ok: false, error: "Gateway not connected. Log in again with your API username and password." } satisfies ActionData;
+    }
     const client = new KwtSmsClient({ username: creds.username, password: creds.password });
-    const [balanceResult, senderResult, coverageResult] = await Promise.all([
-      client.balance(),
-      client.senderIds(),
-      client.coverage(),
-    ]);
+    // 2026-11-11 16:06 +03: was three calls at once; balance first, and stop on a login or account error, task shopify-review-hotfix
+    const balanceResult = await client.balance();
     if (!balanceResult.ok) {
+      if (isAccountError(balanceResult.error.code)) {
+        await saveCredentials(shop, { credentialsVerified: false });
+        return { intent, ok: false, error: `Reload failed: ${balanceResult.error.description}. Log in again with your API username and password.`, credentialsVerified: false } satisfies ActionData;
+      }
       return { intent, ok: false, error: `Reload failed: ${balanceResult.error.description}` } satisfies ActionData;
     }
+    const senderResult = await client.senderIds();
+    const coverageResult = await client.coverage();
     const senderIds = senderResult.ok ? senderResult.data.senderid : [];
     const coverage = coverageResult.ok ? coverageResult.data.prefixes : [];
     await saveCredentials(shop, {
@@ -186,6 +206,10 @@ export default function GatewaySettings() {
       setUsername("");
       setPassword("");
       setSenderId("");
+    }
+    // 2026-11-11 16:06 +03: reload found the login no longer works: show the login form again, task shopify-review-hotfix
+    if (actionData.intent === "reload" && actionData.credentialsVerified === false) {
+      setCredentialsVerified(false);
     }
     if (actionData.intent === "reload" && actionData.ok) {
       if (actionData.senderIds) setSenderIds(actionData.senderIds);
