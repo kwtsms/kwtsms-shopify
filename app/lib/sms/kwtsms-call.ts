@@ -73,7 +73,9 @@ async function callNow<T>(
   mode: CredentialMode,
   call: () => Promise<Result<T>>,
 ): Promise<Result<T>> {
-  if (mode === "new" && (await isLoginPaused(deps.store)).paused) {
+  // 2026-11-11 16:49 +03: the pause now applies to saved logins too: failures from many shops at once must stop every
+  // call, not only new logins; the next order after the pause works again, task shopify-review-hotfix
+  if ((await isLoginPaused(deps.store)).paused) {
     return { ok: false, error: { code: LOGIN_PAUSED_CODE, description: LOGIN_PAUSED_MESSAGE, action: "" } };
   }
   // 2026-11-11 16:37 +03: saved credentials: re-read the flag, an earlier queued call may have just marked it unverified;

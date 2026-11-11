@@ -4,7 +4,7 @@
  * TASK:      shopify-review-hotfix
  * AUTHOR:    kwtSMS integration
  * WHAT:      Unit tests for login-pause.ts and kwtsms-call.ts: 3 failed logins in 60 s across shops pause new logins
- *            for every shop, saved verified credentials keep working, the pause ends after 5 minutes, a rolling
+ *            for every shop (saved logins too, 2026-11-11 16:50 +03 Onyx F6), the pause ends after 5 minutes, a rolling
  *            window (not a fixed one) is used, and only failures are counted.
  * WHY:       Proves the app stops trying new kwtSMS logins after repeated failures from any shop.
  * USAGE:     npm test   (node --test, built-in type stripping, no extra dependency). In-memory store, mock calls,
@@ -114,15 +114,16 @@ test("callKwtsms: new logins are refused while paused, without any API call", as
   assert.ok(!r.ok && r.error.code === LOGIN_PAUSED_CODE && r.error.description === LOGIN_PAUSED_MESSAGE);
 });
 
-test("callKwtsms: a verified shop keeps working while new logins are paused", async () => {
+// 2026-11-11 16:49 +03: saved logins are paused too (many shops failing at once), task shopify-review-hotfix
+test("callKwtsms: while paused, saved logins make no API call either", async () => {
   const { store } = memoryStore();
   const { d } = deps(store);
-  for (let i = 0; i < 3; i++) await callKwtsms(d, `s${i}.myshopify.com`, "new", fail("ERR003"));
+  for (let i = 0; i < 3; i++) await callKwtsms(d, `s${i}.myshopify.com`, "saved", fail("ERR003"));
   assert.equal((await isLoginPaused(store)).paused, true);
   const c = okCall();
   const r = await callKwtsms(d, "verified.myshopify.com", "saved", c.fn);
-  assert.equal(c.calls, 1);
-  assert.equal(r.ok, true);
+  assert.equal(c.calls, 0);
+  assert.ok(!r.ok && r.error.code === LOGIN_PAUSED_CODE);
 });
 
 test("callKwtsms: only login or account errors are counted; saved credentials are marked unverified", async () => {
