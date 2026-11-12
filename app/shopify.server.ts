@@ -10,7 +10,8 @@ import prisma from "./db.server";
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
-  apiVersion: ApiVersion.October25,
+  // 2026-11-12 22:50 +03: 2025-10 retired 2026-10-16; pin 2026-04 to match shopify.app.toml webhooks, shopify-api-version
+  apiVersion: ApiVersion.April26,
   scopes: process.env.SCOPES?.split(","),
   appUrl: process.env.SHOPIFY_APP_URL || "",
   authPathPrefix: "/auth",
@@ -27,7 +28,7 @@ const shopify = shopifyApp({
 });
 
 export default shopify;
-export const apiVersion = ApiVersion.October25;
+export const apiVersion = ApiVersion.April26; // 2026-11-12 22:50 +03: shopify-api-version
 export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
 export const authenticate = shopify.authenticate;
 export const unauthenticated = shopify.unauthenticated;
