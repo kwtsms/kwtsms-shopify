@@ -85,7 +85,12 @@
 }
 
 .heroLogo {
-  height: 80px;
+  /* 2026-11-18 15:42 +03: #1512 (Boss 5902): fixed height 80px made the logo 540px wide on phones and the page
+     scrolled sideways; cap the height, keep the aspect ratio, never wider than the screen. */
+  height: auto;
+  max-height: 80px;
+  width: auto;
+  max-width: 100%;
   margin-bottom: 28px;
   display: block;
   margin-left: auto;
