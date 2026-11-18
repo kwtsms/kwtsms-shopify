@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Uninstall and privacy requests from Shopify are now answered correctly when the store removed the app more than an hour after installing it.
+
 ### Added
 - Integration name and version sent with requests.
 - Automatic cleanup of old SMS logs.
