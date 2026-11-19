@@ -11,6 +11,8 @@
 
 Automated SMS notifications for Shopify stores via the [kwtSMS](https://www.kwtsms.com) gateway. Send order confirmations, shipping updates, and more directly to your customers' phones. Full Arabic and English support.
 
+All kwtSMS integrations: [kwtsms.com/integrations](https://www.kwtsms.com/integrations/)
+
 > This app uses your kwtSMS account. No account yet? [Sign up for a kwtSMS account](https://www.kwtsms.com/signup).
 
 ---
