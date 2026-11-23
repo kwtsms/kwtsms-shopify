@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/readme-header-dark.png">
+  <img alt="kwtSMS for Shopify" src=".github/assets/readme-header-light.png">
+</picture>
+
 # kwtSMS for Shopify
 
 [![CI](https://github.com/kwtsms/kwtsms-shopify/actions/workflows/ci.yml/badge.svg)](https://github.com/kwtsms/kwtsms-shopify/actions/workflows/ci.yml)
